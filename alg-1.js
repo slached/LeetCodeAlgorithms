@@ -1,3 +1,4 @@
+
 const numbers = [3, 3, 6, 1, 2, 6, 2]
 
 const singleNumber = (nums) => {
