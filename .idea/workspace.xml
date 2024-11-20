@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e9b5272f-6136-44c4-a200-8fd4cc0fdd21" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/alg-2.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alg-1.js" beforeDir="false" afterPath="$PROJECT_DIR$/alg-1.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alg-3.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alg-2.js" beforeDir="false" afterPath="$PROJECT_DIR$/alg-2.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,10 +24,25 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;slached&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/slached/LeetCodeAlgorithms.git&quot;,
+    &quot;accountId&quot;: &quot;9a0d8c65-1361-4cc8-bbfb-424ccf0b8f68&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
   <component name="ProjectId" id="2i0ILbJXYiw4Kp2mXaFJik1NTf1" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -35,21 +51,30 @@
   &quot;keyToString&quot;: {
     &quot;Node.js.alg-1.js.executor&quot;: &quot;Run&quot;,
     &quot;Node.js.alg-2.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.alg-3.js.executor&quot;: &quot;Run&quot;,
     &quot;Node.js.main.js.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;20.12.2&quot;,
+    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;20.12.14&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2024.2.0.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\OmerPC\WebstormProjects\js-algorithm" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-WS-241.14494.235" />
+        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-WS-242.21829.149" />
       </set>
     </attachedChunks>
   </component>
@@ -68,6 +93,20 @@
       <workItem from="1720708602921" duration="36000" />
       <workItem from="1720787887425" duration="5000" />
       <workItem from="1720789969129" duration="43000" />
+      <workItem from="1721076415564" duration="3300000" />
+      <workItem from="1721168975187" duration="1754000" />
+      <workItem from="1721170965930" duration="2000" />
+      <workItem from="1721772459527" duration="103000" />
+      <workItem from="1722464895082" duration="92000" />
+      <workItem from="1722465085221" duration="599000" />
+      <workItem from="1723991189315" duration="715000" />
+      <workItem from="1724046941553" duration="594000" />
+      <workItem from="1724307716677" duration="266000" />
+      <workItem from="1724750755695" duration="178000" />
+      <workItem from="1724922493951" duration="33000" />
+      <workItem from="1724922668008" duration="4000" />
+      <workItem from="1724924050656" duration="578000" />
+      <workItem from="1725109040111" duration="623000" />
     </task>
     <servers />
   </component>

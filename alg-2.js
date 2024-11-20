@@ -33,4 +33,4 @@ const reverseParentheses = (s) => {
     return s
 }
 
-console.log(reverseParentheses("(a(bc)d)"))
+console.log(reverseParentheses("(ed(et(oc))el)"))
