@@ -41,6 +41,10 @@ public class Sudoku_solver {
 
 class Solve {
 
+    public enum RowOrColumnE {
+        Row, Column
+    }
+
     // board contains all elements as row 0. index first row 1. index second row ...
     private final char[][] board;
     private int spaceCount;
@@ -140,55 +144,30 @@ class Solve {
 
     void applyTheRules() {
         cutTheWire--;
-
         // First check for if there any possibilities has only one possibility
-        /*
-         * for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (this.possibilityMatrix.get(i).get(j).size() == 1) {
                     this.board[i][j] = this.possibilityMatrix.get(i).get(j).get(0);
                 }
             }
         }
-         */
+
         // Second check is if any row possibilities has only one number
         for (int i = 0; i < 9; i++) {
             // reset frequencyForRow after passing the next row
             ArrayList<Integer> frequencyForRow = new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0));
             ArrayList<Integer> frequencyForColumn = new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0));
-            ArrayList<Integer> frequencyForBox = new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0));
 
             for (int j = 0; j < 9; j++) {
                 // this creates frequencyForRow
                 this.frequencyArrayCreate(i, j, this.possibilityMatrix.get(i).get(j).size(), frequencyForRow);
                 // this creates frequencyForCol
                 this.frequencyArrayCreate(j, i, this.possibilityMatrix.get(j).get(i).size(), frequencyForColumn);
-                // this creates frequencyForBox
-                this.frequencyArrayCreate(, , this.possibilityMatrix.get().get().size(), frequencyForBox);
             }
-
-            char foundedNumberForRowCheck = this.foundTheNumberAccordingToIndex(frequencyForRow);
-            // if there is a number that only one in a row
-
-            if (foundedNumberForRowCheck != '0') {
-                for (int k = 0; k < 9; k++) {
-                    // if that happens k is our guy (had to happen though)
-                    if (this.possibilityMatrix.get(i).get(k).contains(foundedNumberForRowCheck)) {
-                        this.board[i][k] = foundedNumberForRowCheck;
-                    }
-                }
-            }
-            char foundedNumberForColumnCheck = this.foundTheNumberAccordingToIndex(frequencyForColumn);
-            // if there is a number that only one in a column
-            if (foundedNumberForColumnCheck != '0') {
-                for (int k = 0; k < 9; k++) {
-                    // if that happens k is our guy (had to happen though)
-                    if (this.possibilityMatrix.get(k).get(i).contains(foundedNumberForColumnCheck)) {
-                        this.board[k][i] = foundedNumberForColumnCheck;
-                    }
-                }
-            }
-
+            // add board the values
+            this.rowAndColumnModifier(this.foundTheNumberAccordingToIndex(frequencyForRow), i, RowOrColumnE.Row);
+            this.rowAndColumnModifier(this.foundTheNumberAccordingToIndex(frequencyForColumn), i, RowOrColumnE.Column);
         }
 
         // clear the 3 array(row,column and boxes)
@@ -196,7 +175,7 @@ class Solve {
         // recreate possibility array
         this.createPossibilityArray();
 
-        if (this.spaceCount > 0 && this.cutTheWire > 990) {
+        if (this.spaceCount > 0 && this.cutTheWire > 0) {
             applyTheRules();
         }
     }
@@ -236,6 +215,28 @@ class Solve {
         for (int possibility = 0; possibility < size; possibility++) {
             int num = ((this.possibilityMatrix.get(row).get(column).get(possibility)) - '0');
             frequencyArray.set(num - 1, frequencyArray.get(num - 1) + 1);
+        }
+    }
+
+    // this alter the board using frequency data
+    void rowAndColumnModifier(char foundedNumber, int i, RowOrColumnE rowOrColumn) {
+        if (foundedNumber != '0') {
+            for (int k = 0; k < 9; k++) {
+                switch (rowOrColumn) {
+                    case Row -> {
+                        if (this.possibilityMatrix.get(i).get(k).contains(foundedNumber)) {
+                            this.board[i][k] = foundedNumber;
+                        }
+                    }
+                    case Column -> {
+                        if (this.possibilityMatrix.get(k).get(i).contains(foundedNumber)) {
+                            this.board[k][i] = foundedNumber;
+                        }
+                    }
+                    default ->
+                        throw new AssertionError();
+                }
+            }
         }
     }
 
