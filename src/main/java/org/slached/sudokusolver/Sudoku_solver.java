@@ -10,7 +10,6 @@ import java.util.Arrays;
 public class Sudoku_solver {
 
     public static void main(String[] args) {
-
         char[][] temp = {
             {'5', '3', '.', '.', '7', '.', '.', '.', '.'},
             {'6', '.', '.', '1', '9', '5', '.', '.', '.'},
@@ -40,6 +39,8 @@ public class Sudoku_solver {
 }
 
 class Solve {
+
+    int runningQuantity = 0;
 
     public enum RowOrColumnE {
         Row, Column
@@ -100,7 +101,9 @@ class Solve {
 
     }
 
-    void refreshArray() {
+    void refresh() {
+        //reset space count 
+        this.spaceCount = 0;
         //clear all arrays
         this.boxesMatrix = new ArrayList<>(9);
         this.rowMatrix = new ArrayList<>(9);
@@ -109,6 +112,8 @@ class Solve {
 
         // rearrange arrays according to board
         this.arrangeArrays();
+        // recreate possibility matrix
+        this.createPossibilityArray();
 
     }
 
@@ -142,8 +147,7 @@ class Solve {
         }
     }
 
-    void applyTheRules() {
-        cutTheWire--;
+    void firstRule() {
         // First check for if there any possibilities has only one possibility
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -152,7 +156,9 @@ class Solve {
                 }
             }
         }
+    }
 
+    void secondRule() {
         // Second check is if any row possibilities has only one number
         for (int i = 0; i < 9; i++) {
             // reset frequencyForRow after passing the next row
@@ -169,11 +175,88 @@ class Solve {
             this.rowAndColumnModifier(this.foundTheNumberAccordingToIndex(frequencyForRow), i, RowOrColumnE.Row);
             this.rowAndColumnModifier(this.foundTheNumberAccordingToIndex(frequencyForColumn), i, RowOrColumnE.Column);
         }
+    }
 
-        // clear the 3 array(row,column and boxes)
-        this.refreshArray();
-        // recreate possibility array
-        this.createPossibilityArray();
+    void thirdRule() {
+        ArrayList<Integer> frequencyForBox = new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0));
+        ArrayList<ArrayList<Integer>> visitedIndexes = new ArrayList<>();
+        // this rule for check for if there any box(3x3)'s has specific possibility number alone
+        int row = 0;
+        int innerLoopIterationCount = 0;
+        int colStartIndex = 0;
+        int rowStartIndex = 0;
+        boolean resetCondition = false;
+
+        while (row < 9) {
+            for (int col = colStartIndex; col < 3 + colStartIndex; col++) {
+                //code goes here
+                this.frequencyArrayCreate(row, col, this.possibilityMatrix.get(row).get(col).size(), frequencyForBox);
+                innerLoopIterationCount++;
+                visitedIndexes.add(new ArrayList<>(Arrays.asList(row, col)));
+                // one box ended
+                if (innerLoopIterationCount != 0
+                        && innerLoopIterationCount % 9 == 0) {
+                    row = rowStartIndex;
+                    colStartIndex += 3;
+                    // !!! explanation
+                    // find the number in the box that single possibility
+                    // what i mean by single possibility in possibility matrix ->
+                    // if in a box any number only in one cell (for example [0,0] has (1,2,3,4) possibilities and others cells has 2,3,4 but none of the other cells has 1 so that rule applies the [0,0]. cell the number 1)
+                    char number = this.foundTheNumberAccordingToIndex(frequencyForBox);
+                    for (ArrayList<Integer> whichCell : visitedIndexes) {
+                        // whichCell's 0. index row and 1. index are column
+                        // possibility matrix's visited cell's does contain foundedNumber (which has to)
+                        int rowW = whichCell.get(0);
+                        int colW = whichCell.get(1);
+                        if (this.possibilityMatrix.get(rowW).get(colW).contains(number)) {
+                            this.board[rowW][colW] = number;
+                        }
+                    }
+
+                    //reset frequency for later usage
+                    frequencyForBox = new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0));
+                    //reset visited indexes for later usage
+                    visitedIndexes = new ArrayList<>();
+                }
+                // 3 box in row ended and this condition is reset condition
+                if (innerLoopIterationCount != 0 && innerLoopIterationCount % 27 == 0) {
+                    colStartIndex = 0;
+                    rowStartIndex += 3;
+                    row = rowStartIndex;
+                    innerLoopIterationCount = 0;
+                    resetCondition = true;
+                }
+            }
+
+            // pass this in reset condition
+            if (!resetCondition) {
+                // do not increase row in reset condition
+                row++;
+            }
+            // disable reset condition
+            resetCondition = false;
+        }
+
+    }
+
+    void applyTheRules() {
+        cutTheWire--;
+        runningQuantity++;
+        // apply first rule
+        this.firstRule();
+        // clear the 3 array(row,column and boxes) and recreate possibility matrix
+        this.refresh();
+
+        // apply second rule
+        this.secondRule();
+        // clear the 3 array(row,column and boxes) and recreate possibility matrix
+        this.refresh();
+
+        // apply third rule
+        this.thirdRule();
+        this.refresh();
+
+        this.log();
 
         if (this.spaceCount > 0 && this.cutTheWire > 0) {
             applyTheRules();
@@ -187,6 +270,7 @@ class Solve {
     }
 
     void seeBoard() {
+        System.out.println();
         for (char[] board1 : this.board) {
             for (int i = 0; i < 9; i++) {
                 System.out.print(board1[i]);
@@ -238,6 +322,10 @@ class Solve {
                 }
             }
         }
+    }
+
+    void log() {
+        System.out.printf("Remaining Spaces:%d | Tried %d times... \n", this.spaceCount, this.runningQuantity);
     }
 
 }
