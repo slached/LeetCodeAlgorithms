@@ -42,7 +42,6 @@ class Solve {
 
     boolean solved = false;
     int runningQuantity = 0;
-    int test = 0;
 
     public enum RowOrColumnE {
         Row, Column
@@ -51,6 +50,8 @@ class Solve {
     // board contains all elements as row 0. index first row 1. index second row ...
     private final char[][] board;
     private int spaceCount;
+
+    private final ArrayList<Position> visitedCellLocations = new ArrayList<>(2);
 
     private ArrayList<ArrayList<Character>> boxesMatrix = new ArrayList<>(9);
     private ArrayList<ArrayList<Character>> rowMatrix = new ArrayList<>(9);
@@ -241,30 +242,34 @@ class Solve {
     }
 
     void backTracking(int row, int column) {
-        test++;
-        if (test > 200) {
-            return;
-        }
+        //log();
+        runningQuantity++;
+        // if board didn't solved
+        if (!solved) {
+            for (int number = 1; number < 10; number++) {
+                // if cell is empty or already visited(for recursive run condition)
+                if (this.board[row][column] == '.' || this.visitedCellLocations.contains(new Position(row, column))) {
+                    // create position object
+                    Position position = new Position(row, column);
+                    // if not in the visited locations than add in to it
+                    if (!this.visitedCellLocations.contains(position)) {
+                        this.visitedCellLocations.add(position);
+                    }
 
-        for (int number = 1; number < 10; number++) {
-            // if board didn't solved
-            if (!solved) {
-                if (this.board[row][column] == '.') {
                     // try any number
                     this.board[row][column] = (char) (number + '0');
+
                     // if there is ok with this number keep moving into next cell
                     if (this.isItSuitable(row, column, number)) {
                         // before going to the next cell we need to refresh all arrays 
-                        this.seeBoard();
                         this.refresh();
                         this.goToTheNextCell(row, column);
                     } else {
-                        // retake the action
-                        this.board[row][column] = '.';
+                        board[row][column] = '.';
+                        this.visitedCellLocations.remove(position);
                     }
                 } // if cell is defined already go to the next cell
                 else {
-                    this.refresh();
                     this.goToTheNextCell(row, column);
                 }
             }
@@ -282,6 +287,7 @@ class Solve {
 
     void applyTheRules() {
         runningQuantity++;
+
         // apply first rule
         this.firstRule();
         // clear the 3 array(row,column and boxes) and recreate possibility matrix
@@ -302,12 +308,6 @@ class Solve {
         } else {
             this.backTracking(0, 0);
         }
-    }
-
-    void seeArray() {
-        //System.out.println("Boxes Matrix:" + Arrays.asList(boxesMatrix));
-        System.out.println("Possibility Matrix:" + Arrays.asList(possibilityMatrix) + "\n");
-        //this.seeBoard();
     }
 
     void seeBoard() {
@@ -370,10 +370,9 @@ class Solve {
     }
 
     void goToTheNextCell(int row, int column) {
+        this.seeBoard();
         // last element prevent
-
-        if (!(row * column == 64)) {
-
+        if (!(row == 8 && column == 8)) {
             if (column == 8) {
                 this.backTracking(row + 1, 0);
             } else {
@@ -384,4 +383,5 @@ class Solve {
         }
 
     }
+
 }
