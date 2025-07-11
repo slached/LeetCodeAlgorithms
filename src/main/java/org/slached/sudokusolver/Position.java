@@ -1,6 +1,0 @@
-package org.slached.sudokusolver;
-
-// data class
-public record Position(int row, int column) {
-
-}

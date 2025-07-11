@@ -32,9 +32,11 @@ public class Sudoku_solver {
             {'.', '.', '.', '.', '.', '.', '.', '.', '6'},
             {'.', '.', '.', '2', '7', '5', '9', '.', '.'}
         };
-        Solve solve = new Solve(temp2);
-        solve.doTheThing();
-        solve.seeBoard();
+
+        Solve sudoku = new Solve(temp2);
+        sudoku.doTheThing();
+        sudoku.seeBoard();
+
     }
 }
 
@@ -42,6 +44,7 @@ class Solve {
 
     boolean solved = false;
     int runningQuantity = 0;
+    int logMitigator = 50;
 
     public enum RowOrColumnE {
         Row, Column
@@ -50,8 +53,6 @@ class Solve {
     // board contains all elements as row 0. index first row 1. index second row ...
     private final char[][] board;
     private int spaceCount;
-
-    private final ArrayList<Position> visitedCellLocations = new ArrayList<>(2);
 
     private ArrayList<ArrayList<Character>> boxesMatrix = new ArrayList<>(9);
     private ArrayList<ArrayList<Character>> rowMatrix = new ArrayList<>(9);
@@ -242,36 +243,32 @@ class Solve {
     }
 
     void backTracking(int row, int column) {
-        //log();
         runningQuantity++;
+        this.log();
         // if board didn't solved
         if (!solved) {
-            for (int number = 1; number < 10; number++) {
-                // if cell is empty or already visited(for recursive run condition)
-                if (this.board[row][column] == '.' || this.visitedCellLocations.contains(new Position(row, column))) {
-                    // create position object
-                    Position position = new Position(row, column);
-                    // if not in the visited locations than add in to it
-                    if (!this.visitedCellLocations.contains(position)) {
-                        this.visitedCellLocations.add(position);
-                    }
+            // work only if the cell is empty
+            if (this.board[row][column] == '.') {
+                for (int number = 1; number < 10; number++) {
 
-                    // try any number
-                    this.board[row][column] = (char) (number + '0');
-
-                    // if there is ok with this number keep moving into next cell
+                    // if it is ok with this number
                     if (this.isItSuitable(row, column, number)) {
-                        // before going to the next cell we need to refresh all arrays 
-                        this.refresh();
+                        // set number 
+                        this.board[row][column] = (char) (number + '0');
+
                         this.goToTheNextCell(row, column);
+                        // if code goes here that mean future cell failed and that means we need to reset current cell
+                        if (!solved) {
+                            this.board[row][column] = '.';
+                        }
                     } else {
-                        board[row][column] = '.';
-                        this.visitedCellLocations.remove(position);
+                        if (!solved) {
+                            this.board[row][column] = '.';
+                        }
                     }
-                } // if cell is defined already go to the next cell
-                else {
-                    this.goToTheNextCell(row, column);
                 }
+            } else {
+                this.goToTheNextCell(row, column);
             }
         }
 
@@ -279,6 +276,8 @@ class Solve {
     }
 
     boolean isItSuitable(int row, int column, int number) {
+        // refresh these matrix
+        this.refresh();
         // for row column and box
         return !this.rowMatrix.get(row).contains((char) (number + '0'))
                 && !this.columnMatrix.get(column).contains((char) (number + '0'))
@@ -287,6 +286,7 @@ class Solve {
 
     void applyTheRules() {
         runningQuantity++;
+        this.log();
 
         // apply first rule
         this.firstRule();
@@ -366,11 +366,12 @@ class Solve {
     }
 
     void log() {
-        System.out.printf("Remaining Spaces:%d | Tried %d times... \n", this.spaceCount, this.runningQuantity);
+        if (this.runningQuantity % this.logMitigator == 0) {
+            System.out.printf("Complete Percentage:%d%% Remaining Spaces:%d | Tried %d times... \n", (int) (Math.floor(this.spaceCount * 100 / 81)), this.spaceCount, this.runningQuantity);
+        }
     }
 
     void goToTheNextCell(int row, int column) {
-        this.seeBoard();
         // last element prevent
         if (!(row == 8 && column == 8)) {
             if (column == 8) {
